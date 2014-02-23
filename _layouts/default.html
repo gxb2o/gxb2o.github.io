@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heavycoin - Ultra-secure, Democratic, CPU-only Crypto-currency</title>
+    <meta name="description" content="Heavycoin - Ultra-secure, Democratic, CPU-only Crypto-currency">
+    <meta name="author" content="Heavycoin">
+    <meta name="keywords" content="heavycoin, bitcoin, litecoin, primecoin, cryptocurrency">
+
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/modern-business.css" rel="stylesheet">
+    <link href="css/counter.css" rel="stylesheet">
+    <link href="css/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/font-awesome/css/font-awesome-social.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" style="height=100px">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="index.html"><img src="images/heavycoin-logo-text.png" alt="Heavycoin" /></a>
+            </div>
+
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li {% if page.name == "about" %} class="active" {% endif %}><a href="about.html">About</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Launch <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="launch.html">Details</a>
+                            </li>
+                            <li><a href="ipo-calculator.html">IPO calculator</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li {% if page.name == "news" %} class="active" {% endif %}><a href="news.html">News</a>
+                    </li>
+                    <li {% if page.name == "community" %} class="active" {% endif %}><a href="community.html">Community</a>
+                    </li>
+                    <li {% if page.name == "download" %} class="active" {% endif %}><a href="download.html">Download</a>
+                    </li>
+                    <li {% if page.name == "merchants" %} class="active" {% endif %}><a href="merchants.html">Merchants</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="installation.html">Installation</a>
+                            </li>
+                            <li><a href="voting.html">How to vote</a>
+                            </li>
+                            <li><a href="mining.html">How to mine</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+
+    {{ content }}
+
+  {% if page.name == "home" %}
+    <footer class="footer-home">
+  {% else %}
+    <footer class="footer">
+  {% endif %}
+        <div class="container">
+
+                            <div class="row">
+				<div class="col-lg-3">
+                                </div>
+
+				<div class="col-lg-3">
+					<h2>Info</h2>
+					<ul>
+						<li><a href="https://github.com">Source Code (Github)</a></li>
+						<li><a href="mining.html">How to Mine</a></li>
+						<li><a href="voting.html">How to Vote</a></li>
+						<li><a href="{{ site.BTTINFO }}" target="_blank">Forum</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-3">
+					<h2>Exchanges</h2>
+					<ul>
+					    <li><a href="#">Comming soon...</a></li>
+					</ul>
+				</div>
+				<div class="col-lg-3">
+                                </div>
+
+			</div>
+
+           <div class="row" id="footer">
+                <div class="col-lg-6">
+                    <p>Copyright &copy; Heavycoin 2014</p>
+                </div>
+                <div class="col-lg-6 text-right">
+                  <a href="{{ site.twitterurl }}"><i class="fa fa-twitter-square fa-2x"></i></a>
+                  <a href="{{ site.redditurl }}"><i class="icon-reddit fa-2x"></i></a>
+                </div>
+            </div>
+
+
+        </div>
+        <!-- /.container -->
+    </footer>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery-1.10.2.js"></script>
+<script src="js/jquery.formatCurrency-1.4.0.min.js"></script>
+<script src="js/countdown.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+
+<script type='text/javascript'>
+
+{% if page.name == "launch" %}
+$(document).ready(function() {
+  fetchIPOBalance();
+});
+function fetchIPOBalance()
+{
+    $.get("http://blockr.io/api/v1/address/balance/{{ site.HVCIPOAddr }}", function( rdata ) {
+        $('#total_sold').html(rdata.data.balance);        
+  }, "json")
+    .fail(function() {
+        alert("Failed to load data from http://blockr.io/api/v1/address/balance/{{ site.HVCIPOAddr }}");
+    });
+}
+{% endif %}
+
+
+{% if page.name == "ipo-calc" %}
+
+var address='{{ site.HVCIPOAddr }}';
+var transactions;
+var totalIPO=5000000;
+var totalSold=0;
+var totalSoldPlusInvest = 0;
+
+$(document).ready(function() {
+  $('#myshare').hide()
+  fetchIPOBalance();
+});
+
+function fetchIPOBalance()
+{
+    $.get("http://blockr.io/api/v1/address/balance/"+window.address, function( rdata ) {
+        window.totalSold = rdata.data.balance;
+        window.totalSoldPlusInvest = window.totalSold;
+        $('#total_sold').html(window.totalSold);        
+        fetchIPOtxs();
+  }, "json")
+     .fail(function() {
+        alert("Failed to load data from http://blockr.io/api/v1/address/balance/{{ site.HVCIPOAddr }}");
+    });
+
+}
+
+function fetchIPOtxs()
+{
+    $.get("http://blockr.io/api/v1/address/txs/"+window.address, function( rdata ) {
+        transactions = rdata;
+        populateTable();
+  }, "json")
+      .fail(function() {
+        alert("Failed to load data from http://blockr.io/api/v1/address/txs/{{ site.HVCIPOAddr }}");
+    });
+
+}
+
+function populateTable()
+{
+    var row = new Array();
+    var table = "";
+
+    for (var i = 0; i < transactions.data.nb_txs; i++)
+    {
+        var share = window.transactions.data.txs[i].amount/window.totalSoldPlusInvest;
+        row[0] = '<tr class="center">';
+        row[1] = '<td>'+(transactions.data.nb_txs-i)+'</td>';
+        row[2] = '<td>'+window.transactions.data.txs[i].time_utc+'</td>';
+        row[3] = '<td><a href="http://blockchain.info/tx/'+window.transactions.data.txs[i].tx+'" target="_blank">'+window.transactions.data.txs[i].tx.substring(0,6)+'...</a></td>';
+        row[4] = '<td>'+window.transactions.data.txs[i].amount+'</td>';
+        row[5] = '<td>'+(share*100).toFixed(4)+' %</td>';
+        row[6] = '<td class="ipo_share">'+(totalIPO * share).toFixed(8)+'</td>';
+        row[7] = '</tr>';
+        table += row.join();
+    }
+
+    $('#table-investors').html(table);
+
+    $('.ipo_share').formatCurrency({
+                   symbol: '',
+                   positiveFormat: '%n %s',
+                   roundToDecimalPlace: '8'
+                   });
+}
+
+$('#btnCheck').click(function(){
+    var invest = parseFloat($('#yi').val());
+    window.totalSoldPlusInvest = window.totalSold + invest;
+    var share = invest/window.totalSoldPlusInvest;
+    
+    $('#myshare_p').html((share * 100).toFixed(4));
+    $('#myshare_hvc').html((5000000 * share).toFixed(8));
+    $('#myshare_hvc').formatCurrency({
+                   symbol: '',
+                   positiveFormat: '%n %s',
+                   roundToDecimalPlace: '8'
+                   });
+
+    $('#myshare').show()
+    populateTable();
+ });
+  
+{% endif %}
+
+
+{% if page.name == "home" %}
+
+var seconds_since_update = 0;
+$(document).ready(function() {
+ go();
+});
+
+function go()
+{
+  $('#countdown').countDown({
+        targetDate: {
+            'day':      8,
+            'month':    3,
+            'year':     2014,
+            'hour':     12,
+            'min':      0,
+            'sec':      0,
+            'utc':      true
+        }, omitWeeks: true
+    });
+}
+
+var tick = function tick()
+{
+    if (seconds_since_update == 29)
+    {
+        fetch();
+    }
+    else
+    {
+        setTimeout(tick, 1000);
+    }
+    seconds_since_update++;
+    $('#last_update span:first-child').next().text(seconds_since_update + " seconds ago");
+}
+
+function fetch()
+{
+  $.get("http://0.0.0.0/getstats.php", function( data ) {
+      $('#total_supply').text(data.total_supply);
+      $('#max_supply').text(data.max_supply);
+      $('#current_reward').text(data.reward);
+
+      $('#total_supply').formatCurrency({
+                   symbol: 'HVC',
+                   positiveFormat: '%n %s',
+                   roundToDecimalPlace: '0'
+                   });
+      $('#max_supply').formatCurrency({
+                   symbol: 'HVC',
+                   positiveFormat: '%n %s',
+                   roundToDecimalPlace: '0'
+                   });
+      $('#current_reward').formatCurrency({
+                   symbol: 'HVC',
+                   positiveFormat: '%n %s',
+                   roundToDecimalPlace: '0'
+                   });
+
+  seconds_since_update = 0;
+  setTimeout(tick, 1000);
+
+  }, "json" );
+}
+
+{% endif %}
+
+{% if page.name == "about" %}
+
+// enable link to tab
+var hash = document.location.hash;
+var prefix = "tab_";
+if (hash) {
+    $('.nav-tabs a[href='+hash.replace(prefix,"")+']').tab('show');
+    $('html').animate({scrollTop:0}, 'slow');
+    $('body').animate({scrollTop:0}, 'slow');
+} 
+
+// change hash for page-reload
+$('.nav-tabs a').on('shown', function (e) {
+    window.location.hash = e.target.hash.replace("#", "#" + prefix);
+});
+
+{% endif %}
+
+</script>
+
+</body>
+</html>
+
